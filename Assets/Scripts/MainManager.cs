@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class MainManager : MonoBehaviour
 {
@@ -12,16 +14,23 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
+    public Text scoreOnTop;
     
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
+    [SerializeField] public Text playerName;
 
-    
+
     // Start is called before the first frame update
     void Start()
-    {
+      {
+        playerName.text = PlayerPrefs.GetString("key");
+        scoreOnTop.text = "High Score:" + PlayerPrefs.GetInt("score");
+       
+
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -66,6 +75,11 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+        if (m_Points > PlayerPrefs.GetInt("score"))
+        {
+            PlayerPrefs.SetInt("score", m_Points);
+        }
+        
     }
 
     public void GameOver()
